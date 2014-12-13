@@ -5,6 +5,7 @@
  */
 package models;
 
+import controllers.UserController;
 import java.io.Serializable;
 import java.sql.*;
 import java.util.List;
@@ -193,6 +194,7 @@ public class User implements Serializable {
             this.setNama(userModel.getNama());
             return true;
         }
+        
     }
 
     public boolean save() {
@@ -206,6 +208,7 @@ public class User implements Serializable {
         }
         System.out.println("Saving " + nama + "," + password + "," + email + "," + role + "...");
         System.out.println("boolean = " + retval);
+        UserController.fetchUsers();
         return retval;
     }
 
@@ -213,6 +216,7 @@ public class User implements Serializable {
         com.simpleblog.Blog wsdl = WsdlService.getInstance();
         boolean retval = wsdl.deleteUser(this.id);
         System.out.println("Deleting user " + this.id + " result = " + retval);
+        UserController.fetchUsers();
         return retval;
     }
 }

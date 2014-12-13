@@ -29,6 +29,7 @@ public class PostController implements Serializable {
     private final int POSTS_PER_PAGE = 5;
     @ManagedProperty(value="#{post}")
     private Post post;
+    @ManagedProperty(value="#{posts}")
     private ArrayList<Post> posts;
 
     public PostController() {
@@ -197,4 +198,50 @@ public class PostController implements Serializable {
             return "fail";
         }
     }
+    
+    public ArrayList<Post> getPostsData(){
+        FacesContext context = FacesContext.getCurrentInstance();
+        
+        HttpServletRequest req = (HttpServletRequest) context.getExternalContext().getRequest();
+        HttpSession session = req.getSession();
+        PostController postCtrl = (PostController) session.getAttribute("postCtrl");
+        if (postCtrl.getPosts() == null){
+            PostController.fetchPosts();
+        }
+        return postCtrl.getPosts();
+    }
+
+    public static boolean fetchPosts() {
+        /*
+         com.simpleblog.Blog wsdl = WsdlService.getInstance();
+         List<com.simpleblog.UserModel> listUser =  wsdl.listUser();
+         users = new ArrayList<>();
+         System.out.println("fetching users... get "+listUser.size()+"record");
+        
+         for(com.simpleblog.UserModel userModel :listUser){
+         User user = new User();
+         user.setId(userModel.getId());
+         user.setNama(userModel.getNama());
+         user.setEmail(userModel.getEmail());
+         user.setRole(userModel.getRole());
+         users.add(user);
+         }
+         return users;*/
+        System.out.println("woi");
+        FacesContext context = FacesContext.getCurrentInstance();
+        
+        HttpServletRequest req = (HttpServletRequest) context.getExternalContext().getRequest();
+        HttpSession session = req.getSession();
+        UserController userCtrl = (UserController) session.getAttribute("userCtrl");
+        ArrayList<User> users = new ArrayList<>();
+        User user = new User();
+        user.setEmail("woi");
+        user.setNama("hello");
+        users.add(user);
+        userCtrl.setUsers(users);
+        session.setAttribute("userCtrl", userCtrl);
+        return true;
+    }
+    
+    
 }

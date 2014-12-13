@@ -4,7 +4,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"   
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     >
     <h:head>
         <title>
@@ -45,9 +46,11 @@
                         <div class="Field">
                             <h4>Peran :</h4>
                             <div class="form-group">
-                                Admin<h:selectBooleanCheckbox value="#{user.isAdmin}"></h:selectBooleanCheckbox>
-                                Editor<h:selectBooleanCheckbox value="#{user.isEditor}"></h:selectBooleanCheckbox>
-                                Owner<h:selectBooleanCheckbox value="#{user.isOwner}"></h:selectBooleanCheckbox>
+                                <h:selectOneMenu value="#{userCtrl.user.role}">
+                                    <f:selectItem itemValue="admin" itemLabel="Administrator"/>
+                                    <f:selectItem itemValue="editor" itemLabel="Editor"/>
+                                    <f:selectItem itemValue="owner" itemLabel="Owner"/>
+                                </h:selectOneMenu>
                             </div>
                         </div>
                         <h:commandLink style='float:right' action="#{userCtrl.doSubmit()}" value="Ubah" class="btn btn-success" onclick="return validateEmail();"></h:commandLink>

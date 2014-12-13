@@ -39,7 +39,7 @@ public interface Blog {
     @ResponseWrapper(localName = "editPostResponse", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.EditPostResponse")
     public Boolean editPost(
         @WebParam(name = "id", targetNamespace = "")
-        int id,
+        String id,
         @WebParam(name = "judul", targetNamespace = "")
         String judul,
         @WebParam(name = "konten", targetNamespace = "")
@@ -58,20 +58,6 @@ public interface Blog {
     @RequestWrapper(localName = "getPost", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.GetPost")
     @ResponseWrapper(localName = "getPostResponse", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.GetPostResponse")
     public PostModel getPost(
-        @WebParam(name = "id", targetNamespace = "")
-        String id);
-
-    /**
-     * 
-     * @param id
-     * @return
-     *     returns int
-     */
-    @WebMethod
-    @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "search", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.Search")
-    @ResponseWrapper(localName = "searchResponse", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.SearchResponse")
-    public int search(
         @WebParam(name = "id", targetNamespace = "")
         String id);
 
@@ -254,12 +240,12 @@ public interface Blog {
     /**
      * 
      * @return
-     *     returns int
+     *     returns java.util.List<com.simpleblog.PostModel>
      */
     @WebMethod
     @WebResult(targetNamespace = "")
     @RequestWrapper(localName = "listPost", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.ListPost")
     @ResponseWrapper(localName = "listPostResponse", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.ListPostResponse")
-    public int listPost();
+    public List<PostModel> listPost();
 
 }

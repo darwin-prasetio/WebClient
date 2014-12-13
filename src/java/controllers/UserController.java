@@ -113,49 +113,44 @@ public class UserController implements Serializable {
     public ArrayList<User> getUsers() {
         return users;
     }
-    
-    public ArrayList<User> getUsersData(){
+
+    public ArrayList<User> getUsersData() {
         FacesContext context = FacesContext.getCurrentInstance();
-        
+
         HttpServletRequest req = (HttpServletRequest) context.getExternalContext().getRequest();
         HttpSession session = req.getSession();
         UserController userCtrl = (UserController) session.getAttribute("userCtrl");
-        if (userCtrl.getUsers() == null){
+        if (userCtrl.getUsers() == null) {
             UserController.fetchUsers();
         }
         return userCtrl.getUsers();
     }
 
     public static boolean fetchUsers() {
-        /*
-         com.simpleblog.Blog wsdl = WsdlService.getInstance();
-         List<com.simpleblog.UserModel> listUser =  wsdl.listUser();
-         users = new ArrayList<>();
-         System.out.println("fetching users... get "+listUser.size()+"record");
-        
-         for(com.simpleblog.UserModel userModel :listUser){
-         User user = new User();
-         user.setId(userModel.getId());
-         user.setNama(userModel.getNama());
-         user.setEmail(userModel.getEmail());
-         user.setRole(userModel.getRole());
-         users.add(user);
-         }
-         return users;*/
-        System.out.println("woi");
+
+        com.simpleblog.Blog wsdl = WsdlService.getInstance();
+        List<com.simpleblog.UserModel> listUser = wsdl.listUser();
         FacesContext context = FacesContext.getCurrentInstance();
-        
         HttpServletRequest req = (HttpServletRequest) context.getExternalContext().getRequest();
         HttpSession session = req.getSession();
         UserController userCtrl = (UserController) session.getAttribute("userCtrl");
         ArrayList<User> users = new ArrayList<>();
-        User user = new User();
-        user.setEmail("woi");
-        user.setNama("hello");
-        users.add(user);
+        System.out.println("fetching users... get " + listUser.size() + "record");
+
+        for (com.simpleblog.UserModel userModel : listUser) {
+            User user = new User();
+            user.setId(userModel.getId());
+            user.setNama(userModel.getNama());
+            user.setEmail(userModel.getEmail());
+            user.setRole(userModel.getRole());
+            user.setPassword(userModel.getPassword());
+            users.add(user);
+        }
         userCtrl.setUsers(users);
         session.setAttribute("userCtrl", userCtrl);
         return true;
+
+        
     }
 
     public void setUsers(ArrayList<User> users) {

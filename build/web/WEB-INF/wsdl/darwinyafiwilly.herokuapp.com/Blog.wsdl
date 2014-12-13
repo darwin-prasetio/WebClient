@@ -27,11 +27,9 @@
 <xs:element name="listUserResponse" type="tns:listUserResponse"/>
 <xs:element name="publishPost" type="tns:publishPost"/>
 <xs:element name="publishPostResponse" type="tns:publishPostResponse"/>
-<xs:element name="search" type="tns:search"/>
-<xs:element name="searchResponse" type="tns:searchResponse"/>
 <xs:complexType name="editPost">
     <xs:sequence>
-      <xs:element name="id" type="xs:int"/>
+      <xs:element minOccurs="0" name="id" type="xs:string"/>
       <xs:element minOccurs="0" name="judul" type="xs:string"/>
       <xs:element minOccurs="0" name="konten" type="xs:string"/>
       <xs:element minOccurs="0" name="tanggal" type="xs:string"/>
@@ -59,16 +57,6 @@
       <xs:element minOccurs="0" name="konten" type="xs:string"/>
       <xs:element minOccurs="0" name="status" type="xs:string"/>
       <xs:element minOccurs="0" name="tanggal" type="xs:string"/>
-    </xs:sequence>
-  </xs:complexType>
-<xs:complexType name="search">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="id" type="xs:string"/>
-    </xs:sequence>
-  </xs:complexType>
-<xs:complexType name="searchResponse">
-    <xs:sequence>
-      <xs:element name="return" type="xs:int"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="publishPost">
@@ -104,6 +92,7 @@
       <xs:element minOccurs="0" name="email" type="xs:string"/>
       <xs:element minOccurs="0" name="id" type="xs:string"/>
       <xs:element minOccurs="0" name="nama" type="xs:string"/>
+      <xs:element minOccurs="0" name="password" type="xs:string"/>
       <xs:element minOccurs="0" name="role" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
@@ -212,7 +201,7 @@
   </xs:complexType>
 <xs:complexType name="listPostResponse">
     <xs:sequence>
-      <xs:element name="return" type="xs:int"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:postModel"/>
     </xs:sequence>
   </xs:complexType>
 </xs:schema>
@@ -227,10 +216,6 @@
   </wsdl:message>
   <wsdl:message name="getPost">
     <wsdl:part element="tns:getPost" name="parameters">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="search">
-    <wsdl:part element="tns:search" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="publishPost">
@@ -285,10 +270,6 @@
     <wsdl:part element="tns:addPostResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="searchResponse">
-    <wsdl:part element="tns:searchResponse" name="parameters">
-    </wsdl:part>
-  </wsdl:message>
   <wsdl:message name="deleteUser">
     <wsdl:part element="tns:deleteUser" name="parameters">
     </wsdl:part>
@@ -340,12 +321,6 @@
       <wsdl:input message="tns:getPost" name="getPost">
     </wsdl:input>
       <wsdl:output message="tns:getPostResponse" name="getPostResponse">
-    </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="search">
-      <wsdl:input message="tns:search" name="search">
-    </wsdl:input>
-      <wsdl:output message="tns:searchResponse" name="searchResponse">
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="publishPost">
@@ -432,15 +407,6 @@
         <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="getPostResponse">
-        <soap:body use="literal"/>
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="search">
-      <soap:operation soapAction="" style="document"/>
-      <wsdl:input name="search">
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output name="searchResponse">
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>

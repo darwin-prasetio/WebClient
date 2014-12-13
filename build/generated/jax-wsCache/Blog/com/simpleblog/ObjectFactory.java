@@ -40,7 +40,6 @@ public class ObjectFactory {
     private final static QName _DeleteUserResponse_QNAME = new QName("http://simpleblog.com/", "deleteUserResponse");
     private final static QName _GetPostResponse_QNAME = new QName("http://simpleblog.com/", "getPostResponse");
     private final static QName _AddComment_QNAME = new QName("http://simpleblog.com/", "addComment");
-    private final static QName _Search_QNAME = new QName("http://simpleblog.com/", "search");
     private final static QName _ListCommentResponse_QNAME = new QName("http://simpleblog.com/", "listCommentResponse");
     private final static QName _DeletePost_QNAME = new QName("http://simpleblog.com/", "deletePost");
     private final static QName _GetPost_QNAME = new QName("http://simpleblog.com/", "getPost");
@@ -48,7 +47,6 @@ public class ObjectFactory {
     private final static QName _AddPostResponse_QNAME = new QName("http://simpleblog.com/", "addPostResponse");
     private final static QName _EditUser_QNAME = new QName("http://simpleblog.com/", "editUser");
     private final static QName _ListUserResponse_QNAME = new QName("http://simpleblog.com/", "listUserResponse");
-    private final static QName _SearchResponse_QNAME = new QName("http://simpleblog.com/", "searchResponse");
     private final static QName _DeleteUser_QNAME = new QName("http://simpleblog.com/", "deleteUser");
     private final static QName _AddCommentResponse_QNAME = new QName("http://simpleblog.com/", "addCommentResponse");
     private final static QName _EditPostResponse_QNAME = new QName("http://simpleblog.com/", "editPostResponse");
@@ -141,14 +139,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Search }
-     * 
-     */
-    public Search createSearch() {
-        return new Search();
-    }
-
-    /**
      * Create an instance of {@link GetPostResponse }
      * 
      */
@@ -218,14 +208,6 @@ public class ObjectFactory {
      */
     public GetUser createGetUser() {
         return new GetUser();
-    }
-
-    /**
-     * Create an instance of {@link SearchResponse }
-     * 
-     */
-    public SearchResponse createSearchResponse() {
-        return new SearchResponse();
     }
 
     /**
@@ -453,15 +435,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link Search }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://simpleblog.com/", name = "search")
-    public JAXBElement<Search> createSearch(Search value) {
-        return new JAXBElement<Search>(_Search_QNAME, Search.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ListCommentResponse }{@code >}}
      * 
      */
@@ -522,15 +495,6 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://simpleblog.com/", name = "listUserResponse")
     public JAXBElement<ListUserResponse> createListUserResponse(ListUserResponse value) {
         return new JAXBElement<ListUserResponse>(_ListUserResponse_QNAME, ListUserResponse.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link SearchResponse }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://simpleblog.com/", name = "searchResponse")
-    public JAXBElement<SearchResponse> createSearchResponse(SearchResponse value) {
-        return new JAXBElement<SearchResponse>(_SearchResponse_QNAME, SearchResponse.class, null, value);
     }
 
     /**

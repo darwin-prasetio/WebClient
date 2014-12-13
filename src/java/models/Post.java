@@ -26,7 +26,7 @@ public class Post implements Serializable {
 
     private final String tablename = "post";
     private boolean isNewRecord;
-    private int id;
+    private String id;
     private String judul;
     private String tanggal;
     private String konten;
@@ -35,7 +35,7 @@ public class Post implements Serializable {
     private ArrayList<Comment> comments;
 
     public void clearAttributes(){
-        this.setId(0);
+        this.setId(null);
         this.setJudul(null);
         this.setTanggal(null);
         this.setKonten(null);
