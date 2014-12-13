@@ -1,12 +1,15 @@
 package controllers;
 
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +18,7 @@ import models.Post;
 import models.User;
 import services.CookieService;
 import services.DBConnector;
+import services.WsdlService;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -23,14 +27,14 @@ import services.DBConnector;
  */
 @ManagedBean(name = "userCtrl")
 @SessionScoped
-public class UserController {
+public class UserController implements Serializable {
 
     @ManagedProperty(value = "#{user}")
     private User user;
-    private ArrayList<User> users;
+    @ManagedProperty(value = "#{users}")
+    private ArrayList<User> users = null;
 
     public UserController() {
-        
         HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         HttpSession session = req.getSession();
         User userIdentity = (User) session.getAttribute("userIdentity");
@@ -58,7 +62,7 @@ public class UserController {
 
         if (requestParam.containsKey("id")) {
             User user = (User) session.getAttribute("user");
-            user.load(Integer.parseInt(requestParam.get("id")));
+            user.load(requestParam.get("id"));
             user.setIsNewRecord(false);
             session.setAttribute("user", user);
             return "update";
@@ -75,7 +79,7 @@ public class UserController {
 
         if (requestParam.containsKey("id")) {
             User user = new User();
-            user.load(Integer.parseInt(requestParam.get("id")));
+            user.load(requestParam.get("id"));
             user.delete();
             return "delete";
         } else {
@@ -107,25 +111,51 @@ public class UserController {
     }
 
     public ArrayList<User> getUsers() {
-        try {
-            DBConnector dbc = new DBConnector();
-            Statement st = dbc.getCon().createStatement();
-
-            String query = "SELECT `id` FROM `user` ORDER BY `id` DESC";
-            System.out.println(query);
-            ResultSet result = st.executeQuery(query);
-            users = new ArrayList<>();
-
-            while (result.next()) {
-                User user = new User();
-                user.load(result.getInt("id"));
-                users.add(user);
-            }
-            return this.users;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
+        return users;
+    }
+    
+    public ArrayList<User> getUsersData(){
+        FacesContext context = FacesContext.getCurrentInstance();
+        
+        HttpServletRequest req = (HttpServletRequest) context.getExternalContext().getRequest();
+        HttpSession session = req.getSession();
+        UserController userCtrl = (UserController) session.getAttribute("userCtrl");
+        if (userCtrl.getUsers() == null){
+            UserController.fetchUsers();
         }
+        return userCtrl.getUsers();
+    }
+
+    public static boolean fetchUsers() {
+        /*
+         com.simpleblog.Blog wsdl = WsdlService.getInstance();
+         List<com.simpleblog.UserModel> listUser =  wsdl.listUser();
+         users = new ArrayList<>();
+         System.out.println("fetching users... get "+listUser.size()+"record");
+        
+         for(com.simpleblog.UserModel userModel :listUser){
+         User user = new User();
+         user.setId(userModel.getId());
+         user.setNama(userModel.getNama());
+         user.setEmail(userModel.getEmail());
+         user.setRole(userModel.getRole());
+         users.add(user);
+         }
+         return users;*/
+        System.out.println("woi");
+        FacesContext context = FacesContext.getCurrentInstance();
+        
+        HttpServletRequest req = (HttpServletRequest) context.getExternalContext().getRequest();
+        HttpSession session = req.getSession();
+        UserController userCtrl = (UserController) session.getAttribute("userCtrl");
+        ArrayList<User> users = new ArrayList<>();
+        User user = new User();
+        user.setEmail("woi");
+        user.setNama("hello");
+        users.add(user);
+        userCtrl.setUsers(users);
+        session.setAttribute("userCtrl", userCtrl);
+        return true;
     }
 
     public void setUsers(ArrayList<User> users) {

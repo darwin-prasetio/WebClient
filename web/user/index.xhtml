@@ -16,8 +16,10 @@
         <title>Simple Blog - User list</title>
     </head>
     <h:body>
+        
         <ui:composition template="/layouts/main.xhtml">
             <ui:define name="content">
+                <h:outputLink value="#{userCtrl.fetchUsers()}"></h:outputLink>
                 <div class="container">
                     <h1>Daftar Pengguna</h1>
                     <h:form>
@@ -33,20 +35,20 @@
                                 <th>Email</th>
                                 <th>Action</th>
                             </tr>
-                            <c:forEach var="user" items="#{userCtrl.getUsers()}">
-                                <tr>
-                                    <td>#{user.nama}</td>
-                                    <td>#{user.email}</td>
-                                    <td>
-                                        <h:commandButton action="#{userCtrl.showUpdate()}" value="Update" class="btn btn-success">
-                                            <f:param name="id" value="#{user.id}"></f:param>
-                                        </h:commandButton>&nbsp;
-                                        <h:commandButton action="#{userCtrl.showDelete()}" value="Delete" class='btn btn-danger' onclick="return confirm('Anda ingin menghapus user ini?')">
-                                            <f:param name="id" value="#{user.id}"></f:param>
-                                        </h:commandButton>
-                                    </td>
-                                </tr>
-                            </c:forEach>
+                            <c:forEach var="user" items="#{userCtrl.getUsersData()}">
+                                    <tr>
+                                        <td>#{user.nama}</td>
+                                        <td>#{user.email}</td>
+                                        <td>
+                                            <h:commandButton action="#{userCtrl.showUpdate()}" value="Update" class="btn btn-success">
+                                                <f:param name="id" value="#{user.id}"></f:param>
+                                            </h:commandButton>&nbsp;
+                                            <h:commandButton action="#{userCtrl.showDelete()}" value="Delete" class='btn btn-danger' onclick="return confirm('Anda ingin menghapus user ini?')">
+                                                <f:param name="id" value="#{user.id}"></f:param>
+                                            </h:commandButton>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
                         </table>
                     </h:form>
                 </div>

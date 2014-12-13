@@ -7,6 +7,7 @@ package models;
 
 import java.io.Serializable;
 import java.sql.*;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -22,33 +23,39 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import services.CookieService;
 import services.DBConnector;
+import services.WsdlService;
 
 @ManagedBean(name = "userIdentity", eager = true)
 @SessionScoped
 public class User implements Serializable {
 
+    public final static String ADMIN = "admin";
+    public static final String EDITOR = "editor";
+    final public static String OWNER = "owner";
     private boolean isNewRecord;
     private boolean isLoggedIn;
-    private int id;
+    //private int id;
+    private String id;
     private String email;
     private String password;
     private String nama;
-    private boolean isAdmin;
-    private boolean isOwner;
-    private boolean isEditor;
-
+    private String role;
+    /*
+     private boolean isAdmin;
+     private boolean isOwner;
+     private boolean isEditor;
+     */
     private final String tablename = "user";
 
-    public void clearAttributes(){
-        this.setId(0);
+    public void clearAttributes() {
+        this.setId(null);
         this.setEmail(null);
         this.setPassword(null);
         this.setNama(null);
-        this.setIsAdmin(false);
-        this.setIsOwner(false);
-        this.setIsEditor(false);
+        this.setRole(null);
         this.setIsLoggedIn(false);
     }
+
     public boolean getIsNewRecord() {
         return isNewRecord;
     }
@@ -57,11 +64,11 @@ public class User implements Serializable {
         this.isNewRecord = isNewRecord;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -81,24 +88,20 @@ public class User implements Serializable {
         this.nama = nama;
     }
 
-    public boolean getIsGuest(){
-        return !isAdmin && !isEditor && !isOwner;
+    public boolean getIsGuest() {
+        return role == null || role.length() == 0;
     }
-    
+
     public boolean getIsAdmin() {
-        return isAdmin;
+        return role == User.ADMIN;
     }
 
     public boolean getIsEditor() {
-        return isEditor;
+        return role == User.EDITOR;
     }
 
     public boolean getIsOwner() {
-        return isOwner;
-    }
-
-    public void setIsAdmin(boolean isAdmin) {
-        this.isAdmin = isAdmin;
+        return role == User.OWNER;
     }
 
     public String getPassword() {
@@ -118,59 +121,52 @@ public class User implements Serializable {
     }
 
     public void setIsOwner(boolean isOwner) {
-        this.isOwner = isOwner;
-    }
-
-    public boolean isEditor() {
-        return isEditor;
+        this.role = User.OWNER;
     }
 
     public void setIsEditor(boolean isEditor) {
-        this.isEditor = isEditor;
+        this.role = User.EDITOR;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String login() {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        try {
-            DBConnector dbc = new DBConnector();
-            Statement st = dbc.getCon().createStatement();
+        com.simpleblog.Blog wsdl = WsdlService.getInstance();
 
-            String query = "SELECT * FROM " + tablename + " WHERE email='" + email + "' AND password=SHA1('" + password + "')";
-            System.out.println(query);
-            ResultSet result = st.executeQuery(query);
+        User user = (User) request.getSession().getAttribute("userIdentity");
+        if (user == null) {
+            user = new User();
+        }
 
-            //if exist
-            User user = (User) request.getSession().getAttribute("userIdentity");
-            if (user == null) {
-                user = new User();
-            }
-            if (result.next()) {
-
-                user.setId(result.getInt("id"));
-                user.setEmail(result.getString("email"));
-                user.setNama(result.getString("nama"));
-                user.setIsAdmin(result.getBoolean("is_admin"));
-                user.setIsOwner(result.getBoolean("is_owner"));
-                user.setIsEditor(result.getBoolean("is_editor"));
+        List<com.simpleblog.UserModel> users = wsdl.listUser();
+        for (com.simpleblog.UserModel precil : users) {
+            if (precil.getEmail().equals(this.email) && precil.getPassword().equals(this.password)) {
+                user.setId(precil.getId());
+                user.setEmail(precil.getEmail());
+                user.setPassword(precil.getPassword());
+                user.setRole(precil.getRole());
+                user.setNama(precil.getNama());
                 user.setIsLoggedIn(true);
                 request.getSession().setAttribute("userIdentity", user);
                 CookieService.setCookie("email", email, CookieService.DEFAULT_AGE);
                 CookieService.setCookie("password", password, CookieService.DEFAULT_AGE);
                 return "success";
-            } else {
-                FacesMessage message = new FacesMessage();
-                message.setDetail("Invalid Username/Password combination");
-                //message.setSummary("Login Incorrect");
-                message.setSeverity(FacesMessage.SEVERITY_ERROR);
-                context.addMessage("form:error", message);
-                return "fail";
             }
-            
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return "fail";
         }
+        FacesMessage message = new FacesMessage();
+        message.setDetail("Invalid Username/Password combination");
+        //message.setSummary("Login Incorrect");
+        message.setSeverity(FacesMessage.SEVERITY_ERROR);
+        context.addMessage("form:error", message);
+        return "fail";
     }
 
     public String logout() {
@@ -184,79 +180,39 @@ public class User implements Serializable {
         return request.getContextPath() + "/login.xhtml";
     }
 
-    public boolean load(int id) {
-        try {
-            DBConnector dbc = new DBConnector();
-            Statement st = dbc.getCon().createStatement();
-
-            String query = "SELECT * FROM " + tablename + " WHERE id=" + id + " LIMIT 1";
-            ResultSet result = st.executeQuery(query);
-            if (result.next()) {
-                this.setId(result.getInt("id"));
-                this.setEmail(result.getString("email"));
-                this.setPassword(result.getString("password"));
-                this.setIsAdmin(result.getBoolean("is_admin"));
-                this.setNama(result.getString("nama"));
-                this.setIsEditor(result.getBoolean("is_editor"));
-                this.setIsOwner(result.getBoolean("is_owner"));
-                return true;
-            } else {
-                return false;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public boolean load(String id) {
+        com.simpleblog.Blog wsdl = WsdlService.getInstance();
+        com.simpleblog.UserModel userModel = wsdl.getUser(id);
+        System.out.println("fetching user " + id + " get " + userModel.getEmail());
+        if (userModel == null) {
             return false;
+        } else {
+            this.setId(userModel.getId());
+            this.setEmail(userModel.getEmail());
+            this.setRole(userModel.getRole());
+            this.setNama(userModel.getNama());
+            return true;
         }
     }
 
     public boolean save() {
-        try {
-            DBConnector dbc = new DBConnector();
-            Statement st = dbc.getCon().createStatement();
+        com.simpleblog.Blog wsdl = WsdlService.getInstance();
+        boolean retval;
 
-            if (this.isNewRecord) {
-                String query
-                        = "INSERT IGNORE INTO " + tablename
-                        + "(email,password,nama,is_admin,is_owner,is_editor)"
-                        + "VALUES('" + this.getEmail() + "',SHA1('" + this.getPassword() + "'),'" + this.getNama() + "'," + (this.getIsAdmin() ? 1 : 0) + "," + (this.getIsEditor() ? 1 : 0) + "," + (this.getIsOwner() ? 1 : 0) + ")";
-                System.out.println(query);
-                st.executeUpdate(query);
-            } else {
-                String query = "UPDATE " + tablename
-                        + " SET email='" + this.getEmail() + "'"
-                        + ",password=SHA1('" + this.getPassword() + "')"
-                        + ",nama='" + this.getNama() + "'"
-                        + ",is_admin=" + (this.getIsAdmin() ? 1 : 0) + ""
-                        + ",is_editor=" + (this.getIsEditor() ? 1 : 0) + ""
-                        + ",is_owner=" + (this.getIsOwner() ? 1 : 0) + ""
-                        + " WHERE id=" + this.getId();
-                System.out.println(query);
-                st.executeUpdate(query);
-            }
-
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+        if (this.isNewRecord) {
+            retval = wsdl.addUser(nama, password, email, role);
+        } else {
+            retval = wsdl.editUser(password, id, nama, role, email);
         }
+        System.out.println("Saving " + nama + "," + password + "," + email + "," + role + "...");
+        System.out.println("boolean = " + retval);
+        return retval;
     }
 
     public boolean delete() {
-        try {
-            DBConnector dbc = new DBConnector();
-            Statement st = dbc.getCon().createStatement();
-            String query = "DELETE FROM " + tablename
-                    + "  WHERE id=" + this.id;
-            System.out.println(query);
-            st.executeUpdate(query);
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-
+        com.simpleblog.Blog wsdl = WsdlService.getInstance();
+        boolean retval = wsdl.deleteUser(this.id);
+        System.out.println("Deleting user " + this.id + " result = " + retval);
+        return retval;
     }
 }

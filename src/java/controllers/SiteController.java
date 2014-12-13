@@ -55,7 +55,7 @@ public class SiteController implements Serializable {
 
             //if exist
             if (result.next()) {
-                userIdentity.setId(result.getInt("id"));
+                userIdentity.setId(result.getString("id"));
                 userIdentity.setEmail(result.getString("email"));
                 userIdentity.setNama(result.getString("nama"));
                 userIdentity.setIsLoggedIn(true);

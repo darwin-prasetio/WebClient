@@ -52,7 +52,7 @@ public class DBConnector {
 
     public Connection getCon() {
         throw new UnsupportedOperationException("Bagian ini harus diganti jadi WSDL!");
-        return con;
+        //return con;
     }
 
     public void setCon(Connection con) {

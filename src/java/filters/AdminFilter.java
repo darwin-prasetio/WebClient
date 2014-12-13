@@ -25,7 +25,10 @@ public class AdminFilter implements Filter{
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
-
+         System.out.println("ADMIN FILTER ntar diganti");
+        chain.doFilter(request,response);
+       
+        return ;
         User userIdentity = (User) req.getSession().getAttribute("userIdentity");
         if (userIdentity == null || !userIdentity.getIsAdmin()) {
             res.sendError(403,"Anda tidak berhak mengakses halaman ini");

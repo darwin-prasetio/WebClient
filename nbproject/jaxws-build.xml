@@ -28,8 +28,8 @@
     </target>
     <target name="wsimport-client-Blog" depends="wsimport-init">
         <mkdir dir="${build.generated.dir}/jax-wsCache/Blog"/>
-        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/Blog" destdir="${build.generated.dir}/jax-wsCache/Blog" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/Blog/wsdl/localhost_9191/Blog.wsdl" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://localhost:9191/Blog?wsdl" xnocompile="true" xendorsed="true">
-            <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/Blog/wsdl/localhost_9191/Blog.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/Blog" destdir="${build.generated.dir}/jax-wsCache/Blog" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/Blog/wsdl/darwinyafiwilly.herokuapp.com/Blog.wsdl" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://darwinyafiwilly.herokuapp.com/Blog?wsdl" xnocompile="true" xendorsed="true">
+            <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/Blog/wsdl/darwinyafiwilly.herokuapp.com/Blog.wsdl"/>
             <produces dir="${build.generated.dir}/jax-wsCache/Blog"/>
         </wsimport>
         <copy todir="${build.generated.sources.dir}/jax-ws">

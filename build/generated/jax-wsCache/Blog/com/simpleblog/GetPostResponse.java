@@ -8,16 +8,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for listPostResponse complex type.
+ * <p>Java class for getPostResponse complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="listPostResponse">
+ * &lt;complexType name="getPostResponse">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="return" type="{http://simpleblog.com/}postModel" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,27 +27,35 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "listPostResponse", propOrder = {
+@XmlType(name = "getPostResponse", propOrder = {
     "_return"
 })
-public class ListPostResponse {
+public class GetPostResponse {
 
     @XmlElement(name = "return")
-    protected int _return;
+    protected PostModel _return;
 
     /**
      * Gets the value of the return property.
      * 
+     * @return
+     *     possible object is
+     *     {@link PostModel }
+     *     
      */
-    public int getReturn() {
+    public PostModel getReturn() {
         return _return;
     }
 
     /**
      * Sets the value of the return property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link PostModel }
+     *     
      */
-    public void setReturn(int value) {
+    public void setReturn(PostModel value) {
         this._return = value;
     }
 

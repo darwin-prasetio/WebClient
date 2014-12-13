@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://simpleblog.com/}user" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://simpleblog.com/}userModel" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlType;
 public class ListUserResponse {
 
     @XmlElement(name = "return")
-    protected List<User> _return;
+    protected List<UserModel> _return;
 
     /**
      * Gets the value of the return property.
@@ -55,13 +55,13 @@ public class ListUserResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link User }
+     * {@link UserModel }
      * 
      * 
      */
-    public List<User> getReturn() {
+    public List<UserModel> getReturn() {
         if (_return == null) {
-            _return = new ArrayList<User>();
+            _return = new ArrayList<UserModel>();
         }
         return this._return;
     }
