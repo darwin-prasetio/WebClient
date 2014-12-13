@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="http://darwinyafiwilly.herokuapp.com/Service?wsdl" uri="src/conf/xml-resources/web-service-references/Service/wsdl/darwinyafiwilly.herokuapp.com/Service.wsdl"/>
+    <system systemId="http://localhost:9191/Blog?wsdl" uri="src/conf/xml-resources/web-service-references/Blog/wsdl/localhost_9191/Blog.wsdl"/>
+    <system systemId="http://darwinyafiwilly.herokuapp.com/Blog?wsdl" uri="src/conf/xml-resources/web-service-references/Blog/wsdl/darwinyafiwilly.herokuapp.com/Blog.wsdl"/>
+</catalog>
