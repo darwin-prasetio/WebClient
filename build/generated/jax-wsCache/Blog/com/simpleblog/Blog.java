@@ -26,54 +26,29 @@ public interface Blog {
 
     /**
      * 
-     * @param id
-     * @return
-     *     returns java.lang.Boolean
-     */
-    @WebMethod
-    @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "deletePost", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.DeletePost")
-    @ResponseWrapper(localName = "deletePostResponse", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.DeletePostResponse")
-    public Boolean deletePost(
-        @WebParam(name = "id", targetNamespace = "")
-        String id);
-
-    /**
-     * 
-     * @param judul
-     * @param id
+     * @param email
      * @param konten
-     * @param tanggal
+     * @param createdAt
+     * @param nama
+     * @param idPost
      * @return
      *     returns java.lang.Boolean
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "editPost", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.EditPost")
-    @ResponseWrapper(localName = "editPostResponse", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.EditPostResponse")
-    public Boolean editPost(
-        @WebParam(name = "id", targetNamespace = "")
-        int id,
-        @WebParam(name = "judul", targetNamespace = "")
-        String judul,
+    @RequestWrapper(localName = "addComment", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.AddComment")
+    @ResponseWrapper(localName = "addCommentResponse", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.AddCommentResponse")
+    public Boolean addComment(
+        @WebParam(name = "created_at", targetNamespace = "")
+        String createdAt,
+        @WebParam(name = "id_post", targetNamespace = "")
+        String idPost,
+        @WebParam(name = "nama", targetNamespace = "")
+        String nama,
+        @WebParam(name = "email", targetNamespace = "")
+        String email,
         @WebParam(name = "konten", targetNamespace = "")
-        String konten,
-        @WebParam(name = "tanggal", targetNamespace = "")
-        String tanggal);
-
-    /**
-     * 
-     * @param id
-     * @return
-     *     returns java.lang.Boolean
-     */
-    @WebMethod
-    @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "publishPost", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.PublishPost")
-    @ResponseWrapper(localName = "publishPostResponse", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.PublishPostResponse")
-    public Boolean publishPost(
-        @WebParam(name = "id", targetNamespace = "")
-        String id);
+        String konten);
 
     /**
      * 
@@ -102,15 +77,35 @@ public interface Blog {
      * 
      * @param id
      * @return
+     *     returns int
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "search", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.Search")
+    @ResponseWrapper(localName = "searchResponse", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.SearchResponse")
+    public int search(
+        @WebParam(name = "id", targetNamespace = "")
+        String id);
+
+    /**
+     * 
+     * @param judul
+     * @param konten
+     * @param tanggal
+     * @return
      *     returns java.lang.Boolean
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "deleteUser", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.DeleteUser")
-    @ResponseWrapper(localName = "deleteUserResponse", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.DeleteUserResponse")
-    public Boolean deleteUser(
-        @WebParam(name = "id", targetNamespace = "")
-        String id);
+    @RequestWrapper(localName = "addPost", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.AddPost")
+    @ResponseWrapper(localName = "addPostResponse", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.AddPostResponse")
+    public Boolean addPost(
+        @WebParam(name = "judul", targetNamespace = "")
+        String judul,
+        @WebParam(name = "konten", targetNamespace = "")
+        String konten,
+        @WebParam(name = "tanggal", targetNamespace = "")
+        String tanggal);
 
     /**
      * 
@@ -140,7 +135,33 @@ public interface Blog {
 
     /**
      * 
+     * @return
+     *     returns java.util.List<java.lang.Object>
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "listPost", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.ListPost")
+    @ResponseWrapper(localName = "listPostResponse", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.ListPostResponse")
+    public List<Object> listPost();
+
+    /**
+     * 
+     * @param id
+     * @return
+     *     returns java.lang.Boolean
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "publishPost", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.PublishPost")
+    @ResponseWrapper(localName = "publishPostResponse", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.PublishPostResponse")
+    public Boolean publishPost(
+        @WebParam(name = "id", targetNamespace = "")
+        String id);
+
+    /**
+     * 
      * @param judul
+     * @param id
      * @param konten
      * @param tanggal
      * @return
@@ -148,9 +169,11 @@ public interface Blog {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "addPost", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.AddPost")
-    @ResponseWrapper(localName = "addPostResponse", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.AddPostResponse")
-    public Boolean addPost(
+    @RequestWrapper(localName = "editPost", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.EditPost")
+    @ResponseWrapper(localName = "editPostResponse", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.EditPostResponse")
+    public Boolean editPost(
+        @WebParam(name = "id", targetNamespace = "")
+        int id,
         @WebParam(name = "judul", targetNamespace = "")
         String judul,
         @WebParam(name = "konten", targetNamespace = "")
@@ -171,37 +194,17 @@ public interface Blog {
 
     /**
      * 
-     * @param email
-     * @param konten
-     * @param nama
-     * @param idPost
+     * @param id
      * @return
      *     returns java.lang.Boolean
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "addComment", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.AddComment")
-    @ResponseWrapper(localName = "addCommentResponse", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.AddCommentResponse")
-    public Boolean addComment(
-        @WebParam(name = "id_post", targetNamespace = "")
-        String idPost,
-        @WebParam(name = "nama", targetNamespace = "")
-        String nama,
-        @WebParam(name = "email", targetNamespace = "")
-        String email,
-        @WebParam(name = "konten", targetNamespace = "")
-        String konten);
-
-    /**
-     * 
-     * @return
-     *     returns java.util.List<java.lang.Object>
-     */
-    @WebMethod
-    @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "listPost", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.ListPost")
-    @ResponseWrapper(localName = "listPostResponse", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.ListPostResponse")
-    public List<Object> listPost();
+    @RequestWrapper(localName = "deletePost", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.DeletePost")
+    @ResponseWrapper(localName = "deletePostResponse", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.DeletePostResponse")
+    public Boolean deletePost(
+        @WebParam(name = "id", targetNamespace = "")
+        String id);
 
     /**
      * 
@@ -214,6 +217,20 @@ public interface Blog {
     @RequestWrapper(localName = "listComment", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.ListComment")
     @ResponseWrapper(localName = "listCommentResponse", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.ListCommentResponse")
     public List<Object> listComment(
+        @WebParam(name = "id", targetNamespace = "")
+        String id);
+
+    /**
+     * 
+     * @param id
+     * @return
+     *     returns java.lang.Boolean
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "deleteUser", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.DeleteUser")
+    @ResponseWrapper(localName = "deleteUserResponse", targetNamespace = "http://simpleblog.com/", className = "com.simpleblog.DeleteUserResponse")
+    public Boolean deleteUser(
         @WebParam(name = "id", targetNamespace = "")
         String id);
 

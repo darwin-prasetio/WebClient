@@ -18,10 +18,10 @@ import javax.xml.ws.Service;
 public class TestClass {
 
     public static void main(String[] args) throws MalformedURLException {
-        URL url = new URL("http://darwinyafiwilly.herokuapp.com/Blog");
+        URL url = new URL("http://localhost:9191/Blog");
         QName qname = new QName("http://simpleblog.com/", "Blog");
         Service service = Service.create(url, qname);
         Blog newWebService = service.getPort(Blog.class);
-        System.out.println(newWebService.addPost("halo", "halo", "halo"));
+        System.out.println(newWebService.listPost());
     }
 }

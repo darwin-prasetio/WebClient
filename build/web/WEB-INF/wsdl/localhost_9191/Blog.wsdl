@@ -23,8 +23,11 @@
 <xs:element name="listUserResponse" type="tns:listUserResponse"/>
 <xs:element name="publishPost" type="tns:publishPost"/>
 <xs:element name="publishPostResponse" type="tns:publishPostResponse"/>
+<xs:element name="search" type="tns:search"/>
+<xs:element name="searchResponse" type="tns:searchResponse"/>
 <xs:complexType name="addComment">
     <xs:sequence>
+      <xs:element minOccurs="0" name="created_at" type="xs:string"/>
       <xs:element minOccurs="0" name="id_post" type="xs:string"/>
       <xs:element minOccurs="0" name="nama" type="xs:string"/>
       <xs:element minOccurs="0" name="email" type="xs:string"/>
@@ -47,6 +50,16 @@
 <xs:complexType name="addUserResponse">
     <xs:sequence>
       <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="search">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="id" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="searchResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:int"/>
     </xs:sequence>
   </xs:complexType>
 <xs:complexType name="addPost">
@@ -215,6 +228,10 @@
     <wsdl:part element="tns:listUserResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="searchResponse">
+    <wsdl:part element="tns:searchResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:message name="addUserResponse">
     <wsdl:part element="tns:addUserResponse" name="parameters">
     </wsdl:part>
@@ -259,6 +276,10 @@
     <wsdl:part element="tns:addComment" name="parameters">
     </wsdl:part>
   </wsdl:message>
+  <wsdl:message name="search">
+    <wsdl:part element="tns:search" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
   <wsdl:portType name="Blog">
     <wsdl:operation name="addComment">
       <wsdl:input message="tns:addComment" name="addComment">
@@ -270,6 +291,12 @@
       <wsdl:input message="tns:addUser" name="addUser">
     </wsdl:input>
       <wsdl:output message="tns:addUserResponse" name="addUserResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="search">
+      <wsdl:input message="tns:search" name="search">
+    </wsdl:input>
+      <wsdl:output message="tns:searchResponse" name="searchResponse">
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="addPost">
@@ -344,6 +371,15 @@
         <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="addUserResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="search">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="search">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="searchResponse">
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>

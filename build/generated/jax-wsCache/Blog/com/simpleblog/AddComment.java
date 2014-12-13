@@ -17,6 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
+ *         &lt;element name="created_at" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="id_post" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="nama" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="email" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -31,6 +32,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "addComment", propOrder = {
+    "createdAt",
     "idPost",
     "nama",
     "email",
@@ -38,11 +40,37 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class AddComment {
 
+    @XmlElement(name = "created_at")
+    protected String createdAt;
     @XmlElement(name = "id_post")
     protected String idPost;
     protected String nama;
     protected String email;
     protected String konten;
+
+    /**
+     * Gets the value of the createdAt property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    /**
+     * Sets the value of the createdAt property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setCreatedAt(String value) {
+        this.createdAt = value;
+    }
 
     /**
      * Gets the value of the idPost property.

@@ -35,6 +35,7 @@ public class ObjectFactory {
     private final static QName _EditUser_QNAME = new QName("http://simpleblog.com/", "editUser");
     private final static QName _AddPostResponse_QNAME = new QName("http://simpleblog.com/", "addPostResponse");
     private final static QName _ListUserResponse_QNAME = new QName("http://simpleblog.com/", "listUserResponse");
+    private final static QName _SearchResponse_QNAME = new QName("http://simpleblog.com/", "searchResponse");
     private final static QName _AddUserResponse_QNAME = new QName("http://simpleblog.com/", "addUserResponse");
     private final static QName _DeleteUser_QNAME = new QName("http://simpleblog.com/", "deleteUser");
     private final static QName _AddCommentResponse_QNAME = new QName("http://simpleblog.com/", "addCommentResponse");
@@ -46,6 +47,7 @@ public class ObjectFactory {
     private final static QName _PublishPostResponse_QNAME = new QName("http://simpleblog.com/", "publishPostResponse");
     private final static QName _DeleteUserResponse_QNAME = new QName("http://simpleblog.com/", "deleteUserResponse");
     private final static QName _AddComment_QNAME = new QName("http://simpleblog.com/", "addComment");
+    private final static QName _Search_QNAME = new QName("http://simpleblog.com/", "search");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.simpleblog
@@ -92,6 +94,14 @@ public class ObjectFactory {
      */
     public PublishPost createPublishPost() {
         return new PublishPost();
+    }
+
+    /**
+     * Create an instance of {@link SearchResponse }
+     * 
+     */
+    public SearchResponse createSearchResponse() {
+        return new SearchResponse();
     }
 
     /**
@@ -180,6 +190,14 @@ public class ObjectFactory {
      */
     public EditPostResponse createEditPostResponse() {
         return new EditPostResponse();
+    }
+
+    /**
+     * Create an instance of {@link Search }
+     * 
+     */
+    public Search createSearch() {
+        return new Search();
     }
 
     /**
@@ -346,6 +364,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link SearchResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://simpleblog.com/", name = "searchResponse")
+    public JAXBElement<SearchResponse> createSearchResponse(SearchResponse value) {
+        return new JAXBElement<SearchResponse>(_SearchResponse_QNAME, SearchResponse.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link AddUserResponse }{@code >}}
      * 
      */
@@ -442,6 +469,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://simpleblog.com/", name = "addComment")
     public JAXBElement<AddComment> createAddComment(AddComment value) {
         return new JAXBElement<AddComment>(_AddComment_QNAME, AddComment.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link Search }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://simpleblog.com/", name = "search")
+    public JAXBElement<Search> createSearch(Search value) {
+        return new JAXBElement<Search>(_Search_QNAME, Search.class, null, value);
     }
 
 }
