@@ -14,7 +14,7 @@ import models.User;
 
 public class CookieService {
 
-    public final static int DEFAULT_AGE = 20; //20 deitk
+    public final static int DEFAULT_AGE = 2000; //20 deitk
 
     public static void setCookie(String name, String value, int expiry) {
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -71,6 +71,7 @@ public class CookieService {
     }
 
     public static boolean loginWithCookies() {
+        System.out.print("mencoba login dengan cookie... ");
         HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         HttpSession session = req.getSession();
         User userIdentity = (User) session.getAttribute("userIdentity");
@@ -81,6 +82,7 @@ public class CookieService {
         Cookie passwordCookie = CookieService.getCookie("password");
 
         if (emailCookie == null || passwordCookie == null) {
+            System.out.println("gagal!");
             return false;
         } else {
             String email = emailCookie.toString();
@@ -88,6 +90,7 @@ public class CookieService {
             userIdentity.setEmail(email);
             userIdentity.setPassword(password);
             userIdentity.login();
+            System.out.println("berhasil login dengan cookie !");
             return true;
         }
 

@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -21,8 +22,9 @@ import models.Post;
 import models.User;
 import services.CookieService;
 import services.DBConnector;
+import services.WsdlService;
 
-@ManagedBean(name = "postCtrl", eager = true)
+@ManagedBean(name = "postCtrl")
 @SessionScoped
 public class PostController implements Serializable {
 
@@ -30,7 +32,7 @@ public class PostController implements Serializable {
     @ManagedProperty(value="#{post}")
     private Post post;
     @ManagedProperty(value="#{posts}")
-    private ArrayList<Post> posts;
+    private ArrayList<Post> posts =null;
 
     public PostController() {
         HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
@@ -67,13 +69,13 @@ public class PostController implements Serializable {
             comment = new Comment();
         }
         if (requestParam.containsKey("id")) {
-            int post_id = Integer.parseInt(requestParam.get("id"));
+            String post_id = requestParam.get("id");
             post = new Post();
             post.setId(post_id);
             post.load(post_id);
-            comment.setPostId(post_id);
-            comment.setNama(userIdentity.getNama());
-            comment.setEmail(userIdentity.getEmail());
+            //comment.setPostId(post_id);
+            //comment.setNama(userIdentity.getNama());
+            //comment.setEmail(userIdentity.getEmail());
             session.setAttribute("post", post);
             session.setAttribute("comment",comment);
             return "view";
@@ -103,7 +105,7 @@ public class PostController implements Serializable {
         
         if (requestParam.containsKey("id")) {
             this.post = new Post();
-            this.post.setId(Integer.parseInt(requestParam.get("id")));
+            this.post.setId(requestParam.get("id"));
             this.post.delete();
             return "delete";
         }
@@ -112,7 +114,7 @@ public class PostController implements Serializable {
   
 
     public String showIndex() {
-        this.loadPosts(0);
+        PostController.fetchPosts();
         HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         return req.getContextPath() + "/faces/post/index.xhtml";
     }
@@ -126,7 +128,7 @@ public class PostController implements Serializable {
         User userIdentity = (User) session.getAttribute("userIdentity");
         if (requestParam.containsKey("id")) {
             post = (Post) session.getAttribute("post");
-            post.load(Integer.parseInt(requestParam.get("id")));
+            post.load(requestParam.get("id"));
             post.setIsNewRecord(false);
             session.removeAttribute("post");
             session.setAttribute("post",post);
@@ -144,7 +146,7 @@ public class PostController implements Serializable {
     public void setPost(Post post) {
         this.post = post;
     }
-
+/*
     public boolean loadPosts(int offset) {
         try {
             DBConnector dbc = new DBConnector();
@@ -166,9 +168,8 @@ public class PostController implements Serializable {
             return false;
         }
     }
-
+*/
     public ArrayList<Post> getPosts() {
-        loadPosts(0);
         return posts;
     }
 
@@ -185,13 +186,12 @@ public class PostController implements Serializable {
         User userIdentity = (User) session.getAttribute("userIdentity");
         
         if (requestParam.containsKey("id")) {
-            int post_id = Integer.parseInt(requestParam.get("id"));
+            String post_id = requestParam.get("id");
             post.setId(post_id);
             post.load(post_id);
             post.setPublished(true);
             post.setIsNewRecord(false);
             post.save();
-            System.out.println("jancok");
             session.setAttribute("post", post);
             return "success";
         } else {
@@ -212,34 +212,27 @@ public class PostController implements Serializable {
     }
 
     public static boolean fetchPosts() {
-        /*
-         com.simpleblog.Blog wsdl = WsdlService.getInstance();
-         List<com.simpleblog.UserModel> listUser =  wsdl.listUser();
-         users = new ArrayList<>();
-         System.out.println("fetching users... get "+listUser.size()+"record");
-        
-         for(com.simpleblog.UserModel userModel :listUser){
-         User user = new User();
-         user.setId(userModel.getId());
-         user.setNama(userModel.getNama());
-         user.setEmail(userModel.getEmail());
-         user.setRole(userModel.getRole());
-         users.add(user);
-         }
-         return users;*/
-        System.out.println("woi");
+        System.out.println("Calling firebase...");
+        com.simpleblog.Blog wsdl = WsdlService.getInstance();
+        List<com.simpleblog.PostModel> listPost = wsdl.listPost();
         FacesContext context = FacesContext.getCurrentInstance();
-        
         HttpServletRequest req = (HttpServletRequest) context.getExternalContext().getRequest();
         HttpSession session = req.getSession();
-        UserController userCtrl = (UserController) session.getAttribute("userCtrl");
-        ArrayList<User> users = new ArrayList<>();
-        User user = new User();
-        user.setEmail("woi");
-        user.setNama("hello");
-        users.add(user);
-        userCtrl.setUsers(users);
-        session.setAttribute("userCtrl", userCtrl);
+        PostController postCtrl = (PostController) session.getAttribute("postCtrl");
+        ArrayList<Post> posts = new ArrayList<>();
+        System.out.println("fetching post... get " + listPost.size() + "record");
+
+        for (com.simpleblog.PostModel postModel : listPost) {
+            Post post = new Post();
+            post.setId(postModel.getId());
+            post.setJudul(postModel.getJudul());
+            post.setKonten(postModel.getKonten());
+            post.setTanggal(postModel.getTanggal());
+            post.setPublished(Boolean.parseBoolean(postModel.getStatus()));
+            posts.add(post);
+        }
+        postCtrl.setPosts(posts);
+        session.setAttribute("postCtrl", postCtrl);
         return true;
     }
     

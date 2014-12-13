@@ -18,8 +18,10 @@
                         <h:form style="float:right;" rendered="#{not userIdentity.isGuest}">
                             <h:commandButton action="#{postCtrl.showCreate()}" value="+ Tambah Post" class="btn btn-primary"></h:commandButton>
                         </h:form>
-                        <c:forEach var="post" items="#{postCtrl.getPosts()}">
+                        <c:forEach var="post" items="#{postCtrl.getPostsData()}">
+                            #{post.judul}
                             <c:if test="#{!userIdentity.getIsGuest() or post.published}">
+                                
                                 <h:form>
                                     <div class="post-preview">
                                         <div style="float:right;">

@@ -5,6 +5,7 @@
  */
 package models;
 
+import controllers.PostController;
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,6 +20,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import services.DBConnector;
+import services.WsdlService;
 
 @ManagedBean(name = "post")
 @SessionScoped
@@ -33,7 +35,7 @@ public class Post implements Serializable {
     private boolean published;
     private int userId;
     private ArrayList<Comment> comments;
-
+    
     public void clearAttributes(){
         this.setId(null);
         this.setJudul(null);
@@ -63,81 +65,53 @@ public class Post implements Serializable {
         }
     }
 
-    public boolean load(int id) {
-        try {
-            DBConnector dbc = new DBConnector();
-            Statement st = dbc.getCon().createStatement();
-
-            String query = "SELECT * FROM " + tablename + " WHERE id=" + id + " LIMIT 1";
-            ResultSet result = st.executeQuery(query);
-            if (result.next()) {
-                this.setId(result.getInt("id"));
-                this.setJudul(result.getString("judul"));
-                this.setTanggal(result.getString("tanggal"));
-                this.setKonten(result.getString("konten"));
-                this.setPublished(result.getBoolean("published"));
-                this.setUserId(result.getInt("user_id"));
-
-                return true;
-            } else {
-                return false;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public boolean load(String id) {
+        System.out.println("Calling firebase...");
+        com.simpleblog.Blog wsdl = WsdlService.getInstance();
+        com.simpleblog.PostModel postModel = wsdl.getPost(id);
+        if (postModel == null) {
             return false;
+        } else {
+            System.out.println("fetching post " + id + " get " + postModel.getJudul());
+            this.setId(postModel.getId());
+            this.setJudul(postModel.getJudul());
+            this.setKonten(postModel.getKonten());
+            this.setTanggal(postModel.getTanggal());
+            this.setPublished(Boolean.parseBoolean(postModel.getStatus()));
+            return true;
         }
     }
 
     public boolean save() {
-        try {
-            DBConnector dbc = new DBConnector();
-            Statement st = dbc.getCon().createStatement();
+        System.out.println("Calling firebase...");
+        com.simpleblog.Blog wsdl = WsdlService.getInstance();
+        boolean retval;
 
-            if (this.isNewRecord) {
-                String query
-                        = "INSERT IGNORE INTO " + tablename
-                        + "(judul,tanggal,konten,user_id,published)"
-                        + "VALUES('" + this.getJudul() + "','" + this.getTanggal() + "','" + this.getKonten() + "','" + this.getUserId() + "','" + (this.getPublished()?1:0) + "')";
-                System.out.println(query);
-                st.executeUpdate(query);
-            } else {
-                String query = "UPDATE " + tablename
-                        + " SET judul='" + this.getJudul() + "',tanggal='" + this.getTanggal() + "',konten='" + this.getKonten() + "',user_id='" + this.getUserId() + "',published=" +(this.getPublished()?1:0)
-                        + " WHERE id=" + this.getId();
-                System.out.println(query);
-                st.executeUpdate(query);
-            }
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+        if (this.isNewRecord) {
+            retval = wsdl.addPost(judul,konten,tanggal);
+        } else {
+            retval = wsdl.editPost(id,judul,konten,tanggal);
         }
+        System.out.println("Done saving " + judul + "," + konten + "," + tanggal + "...");
+        PostController.fetchPosts();
+        return retval;
     }
 
     public boolean delete() {
-        try {
-            DBConnector dbc = new DBConnector();
-            Statement st = dbc.getCon().createStatement();
-            String query = "DELETE FROM " + tablename
-                    + "  WHERE id=" + this.id;
-            System.out.println(query);
-            st.executeUpdate(query);
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+        System.out.println("Calling firebase...");
+        com.simpleblog.Blog wsdl = WsdlService.getInstance();
+        boolean retval = wsdl.deletePost(this.id);
+        System.out.println("Deleting user " + this.id + " result = " + retval);
+        PostController.fetchPosts();
+        return retval;
 
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -37,7 +37,7 @@
                     <h:selectBooleanCheckbox value="#{post.published}" rendered="false"></h:selectBooleanCheckbox>
                     <br/>
                     <h:inputHidden value="#{post.userId}"></h:inputHidden>
-                    <h:commandLink onclick="return DateValidator();" rendered="#{postCtrl.post.id==0}" action="#{postCtrl.doSubmit()}" value="Tambah" class="btn btn-primary"></h:commandLink>
+                    <h:commandLink onclick="return DateValidator();" action="#{postCtrl.doSubmit()}" value="Tambah" class="btn btn-primary"></h:commandLink>
                     </div>
                 </h:form>
             </ui:define>

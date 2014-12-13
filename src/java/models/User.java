@@ -149,6 +149,7 @@ public class User implements Serializable {
 
         List<com.simpleblog.UserModel> users = wsdl.listUser();
         for (com.simpleblog.UserModel precil : users) {
+            System.out.println(this.email+" "+precil.getEmail());
             if (precil.getEmail().equals(this.email) && precil.getPassword().equals(this.password)) {
                 user.setId(precil.getId());
                 user.setEmail(precil.getEmail());
